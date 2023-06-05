@@ -1,0 +1,171 @@
+
+Name    : Chauhan Mehul Mahendrabhai
+Roll no : 07
+Course  : MCA 2
+Subject : Java Programming
+Assignment 3 : Collections
+===================================================================================
+
+2) Create a HashSet of 5 names. Write a menu driven program to do the following:
+	a. Add a new name
+	b. Remove a name
+	c. Search a name
+	d. Display all the names (display in reverser order also – use ListIterator )
+	e. Display number of elements in hashset
+
+===================================================================================
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Iterator;
+
+public class HashSetDemo {
+    public static void addName(HashSet<String> s, String name) {
+        s.add(name);
+    }
+	
+	public static void removeName(HashSet<String> s, String name) {
+		s.remove(name);
+	}	
+	
+	public static void searchName(HashSet<String> s,String name) {
+		if(s.contains(name)) {
+			System.out.println(name + " Found");
+		} else {
+			System.out.println(name + " Not Found");
+		}
+	}
+
+	public static void numberofElement(HashSet<String> s) {
+		int size = s.size();
+		System.out.println("Size of Element: " + size);
+	}
+
+    public static void display(HashSet<String> s) {
+        Iterator itr= s.iterator();
+        while(itr.hasNext()) {
+            System.out.println(itr.next());
+        }
+    }
+
+	public static void printMenu() {
+		System.out.println("0. Exit");
+		System.out.println("1. Add Element");
+		System.out.println("2. Remove Element");
+		System.out.println("3. Search Element");
+		System.out.println("4. Find the number of Element");
+		System.out.println("5. Display");
+	}
+
+    public static void main(String[] args) {
+
+        HashSet<String> s = new HashSet<String>();
+		Scanner sc = new Scanner(System.in);
+		int ch;
+		String name;
+		do {
+			printMenu();
+			ch = sc.nextInt();
+			switch(ch) {
+				case 0:
+					System.out.println("Exiting...");
+					break;
+				case 1:
+					System.out.print("Enter Name: ");
+					name = sc.next();
+					addName(s,name);
+					break;
+				case 2:
+					System.out.print("Enter Name: ");
+					name= sc.next();
+					removeName(s,name);
+					break;
+				case 3:
+					System.out.print("Enter Name: ");
+					name = sc.next();
+					searchName(s,name);
+					break;
+				case 4:
+					numberofElement(s);
+					break;
+				case 5:
+					display(s);
+					break;
+				default:
+					System.out.println("Please Enter Valid Input");
+			}
+		} while(ch!=0);
+    }
+}
+
+
+===================================================================================
+Output
+===================================================================================
+
+
+		0. Exit
+		1. Add Element
+		2. Remove Element
+		3. Search Element
+		4. Find the number of Element
+		5. Display
+		1
+		Enter Name: Kuldip
+		0. Exit
+		1. Add Element
+		2. Remove Element
+		3. Search Element
+		4. Find the number of Element
+		5. Display
+		1
+		Enter Name: Hardik
+		0. Exit
+		1. Add Element
+		2. Remove Element
+		3. Search Element
+		4. Find the number of Element
+		5. Display
+		1
+		Enter Name: Paras
+		0. Exit
+		1. Add Element
+		2. Remove Element
+		3. Search Element
+		4. Find the number of Element
+		5. Display
+		2
+		Enter Name: Hardik
+		0. Exit
+		1. Add Element
+		2. Remove Element
+		3. Search Element
+		4. Find the number of Element
+		5. Display
+		3
+		Enter Name: Paras
+		Paras Found
+		0. Exit
+		1. Add Element
+		2. Remove Element
+		3. Search Element
+		4. Find the number of Element
+		5. Display
+		4
+		Size of Element: 2
+		0. Exit
+		1. Add Element
+		2. Remove Element
+		3. Search Element
+		4. Find the number of Element
+		5. Display
+		5
+		Paras
+		Kuldip
+		0. Exit
+		1. Add Element
+		2. Remove Element
+		3. Search Element
+		4. Find the number of Element
+		5. Display
+		0
+		Exiting...

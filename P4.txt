@@ -1,0 +1,592 @@
+
+Name    : Chauhan Mehul Mahendrabhai
+Roll no : 07
+Course  : MCA 2
+Subject : Java Programming
+Assignment 3 : Interface and Classes
+===================================================================================
+
+
+4) Develop a basic graphics package.
+    a. Within the package create a abstract class Shape having function print().
+    b. Create two subclasses Two Dimensional and three Dimensional from Shape class .
+    c. These two subclasses also should be abstract.
+    d. Implement the print method in the subclasses Square, Circle, Cylinder, Cube, to output
+		the type and dimension of the shape Also include area and volume methods to calculate
+		the area and volume of the concrete shapes
+    e. Write a driver program that creates various shapes and put them in an array of Shape
+		Use polymorphism to print and calculate the area and volume of objects stored in array.
+
+===================================================================================
+
+abstract public class Shape {
+    private String dimension, type;
+
+    Shape(String dimension, String type) {
+        this.dimension = dimension;
+        this.type = type;
+    }
+
+    Shape() {
+        this("Zero", "None");
+    }
+
+    public String getDimension() {
+        return this.dimension;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    abstract public void print();
+    abstract public void printAreaAndVolumeOrPerimeter();
+    abstract public double getArea();
+}
+
+abstract public class TwoDimensional extends Shape {
+
+    TwoDimensional(String type) {
+        super("Two", type);
+    }
+
+    TwoDimensional() {
+        this("None");
+    }
+
+    abstract public double getPerimeter();
+}
+
+abstract public class ThreeDimensional extends Shape {
+
+    ThreeDimensional(String type) {
+        super("Three", type);
+    }
+
+    ThreeDimensional() {
+        this("None");
+    }
+
+    abstract public double getVolume();
+}
+
+
+public class Square extends TwoDimensional {
+    private double side;
+
+    Square(double side) {
+        super("Square");
+        this.side = side;
+    }
+
+    Square() {
+        this(0.0);
+    }
+
+    public double getSide() {
+        return this.side;
+    }
+
+    @Override
+    public void print() {
+        System.out.println("Shape Details");
+        System.out.println("Type : " + super.getType());
+        System.out.println("Side : " + this.side);
+        System.out.println("Dimensions : " + super.getDimension());
+    }
+
+    @Override
+    public void printAreaAndVolumeOrPerimeter(){
+        System.out.println(super.getType() + "( S: "+ this.side +" )");
+        System.out.println("Area: " + this.getArea());
+        System.out.println("Perimeter: " + this.getPerimeter());
+    }
+
+    @Override
+    public double getArea() {
+        return Math.pow(this.side, 2);
+    }
+
+    @Override
+    public double getPerimeter() {
+        return (this.side * 4);
+    }
+}
+
+
+public class Circle extends TwoDimensional {
+    private double radius;
+
+    Circle(double radius) {
+        super("Circle");
+        this.radius = radius;
+    }
+
+    Circle() {
+        this(0.0);
+    }
+
+    public double getRadius() {
+        return this.radius;
+    }
+
+    @Override
+    public void print() {
+        System.out.println("Shape Details");
+        System.out.println("Type : " + super.getType());
+        System.out.println("Radius : " + this.radius);
+        System.out.println("Dimensions : " + super.getDimension());
+    }
+
+    @Override
+    public void printAreaAndVolumeOrPerimeter(){
+        System.out.println(super.getType() + "( R: "+ this.radius +" )");
+        System.out.println("Area: " + this.getArea());
+        System.out.println("Perimeter: " + this.getPerimeter());
+    }
+
+    @Override
+    public double getArea() {
+        return Math.PI * Math.pow(this.radius, 2);
+    }
+
+    @Override
+    public double getPerimeter(){
+        return (2 * Math.PI * this.radius);
+    }
+}
+
+
+public class Cylinder extends Figure implements IFig{
+    private double h;
+
+    public Cylinder(double r, double h){
+        super(r);
+        this.h = h;
+    }
+
+    public Cylinder(){
+        this(0d, 0d);
+    }
+
+    @Override
+    public void calcArea(){
+        super.a = (2 * IFig.pi * super.r * this.h) + (2  * IFig.pi * Math.pow(super.r, 2));
+    }
+
+    @Override
+    public void calcVolume(){
+        super.v = IFig.pi * Math.pow(super.r, 2) * this.h;
+    }
+
+    @Override
+    public void dispArea(){
+        System.out.printf("Area: %.2f", super.a);
+        System.out.println();
+    }
+
+    @Override
+    public void dispVolume(){
+        System.out.printf("Volume: %.2f", super.v);
+        System.out.println();
+    }
+}
+
+
+public class Cube extends ThreeDimensional {
+    private double edge;
+
+    Cube(double edge) {
+        super("Cube");
+        this.edge = edge;
+    }
+
+    Cube() {
+        this(0.0);
+    }
+
+    public double getEdge() {
+        return this.edge;
+    }
+    
+    @Override
+    public void print() {
+        System.out.println("Shape Details");
+        System.out.println("Type : " + super.getType());
+        System.out.println("Dimensions : " + super.getDimension());
+        System.out.println("Edge : " + this.edge);
+    }
+
+    @Override
+    public void printAreaAndVolumeOrPerimeter(){
+        System.out.println( super.getType() +"( E: "+ this.edge +" )");
+        System.out.println("Area: " + this.getArea());
+        System.out.println("Volume: " + this.getVolume());
+    }
+
+    @Override
+    public double getArea() {
+        return 6 * Math.pow(this.edge, 2);
+    }
+
+    @Override
+    public double getVolume() {
+        return Math.pow(this.edge, 3);
+    }
+}
+
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void printAllShapesDetails(Shape[] shapes){
+        if(shapes[0] == null){
+            System.out.println("There is no shapes to display");
+            return;
+        }
+        for(int i=0; i<shapes.length; i++){
+            if(shapes[i] == null){
+                return;
+            }
+            System.out.println("Shape " + i);
+            shapes[i].print();
+        }
+    }  
+
+    public static void printAllShapesAreaAndVolume(Shape[] shapes) {
+        if(shapes[0] == null){
+            System.out.println("There is no shapes to display volume and area");
+            return;
+        } 
+        for(Shape currentShape : shapes){
+            if(currentShape == null)
+                break;
+            currentShape.printAreaAndVolumeOrPerimeter();
+        }
+    }
+
+    public static void addShape(Shape[] shapes, Shape newShape){
+        for(int i=0; i<shapes.length; i++){
+            if(shapes[i] == null){
+                shapes[i] =  newShape;
+                return;
+            }
+        }
+    }
+
+    public static Square getSquareFromUser(Scanner sc) {
+        System.out.println("Enter Side: ");
+        return new Square(sc.nextDouble());
+    }
+
+    public static Circle getCircleFromUser(Scanner sc ){
+        System.out.println("Enter Radius:");
+        return new Circle(sc.nextDouble());
+    }
+
+    public static Cylinder getCylinderFromUser(Scanner sc){
+        boolean isHeightAndRadiusSame = false;
+        System.out.println("Is height and radius same?(y,n):");
+        // add nextline to handle line after numeric value input from scanner
+        sc.nextLine();
+        isHeightAndRadiusSame = sc.nextLine().charAt(0) == 'y';
+
+        if(isHeightAndRadiusSame){
+            System.out.println("Enter Height and Radius:");
+            return new Cylinder(sc.nextDouble());
+        }
+        else {
+            System.out.println("Enter Height:");
+            double height = sc.nextDouble();
+            System.out.println("Enter Radius:");
+            double radius = sc.nextDouble();
+            return new Cylinder(height,radius);
+        }
+    }
+
+    public static Cube getCubeFromUser(Scanner sc){
+        System.out.println("Enter Edge:");
+        return new Cube(sc.nextDouble());
+    }
+
+    public static void printShapeMenu() {
+        System.out.println("\nSelect Shape");
+        System.out.println("1. Square");
+        System.out.println("2. Circle");
+        System.out.println("3. Cylinder");
+        System.out.println("4. Cube");
+        System.out.println("0. Exit");
+    }
+
+    public static void runShapeMenu(Shape[] shapes, Scanner sc) {
+        int shapeChoice;
+
+        if(shapes[shapes.length -1 ] != null) {
+            System.out.println("Shapes array is full");
+            return;
+        }
+
+        printShapeMenu();
+        System.out.println("Enter shape choice: ");
+        shapeChoice = sc.nextInt();
+        switch (shapeChoice) {
+            case 0:
+                System.out.println("Exited From shape menu");
+                break;
+            case 1:
+                System.out.println("Enter Square Details:");
+                addShape(shapes, getSquareFromUser(sc));
+                break;
+            case 2:
+                System.out.println("Enter Circle Details:");
+                addShape(shapes, getCircleFromUser(sc));
+                break;
+            case 3:
+                System.out.println("Enter Cylinder Details:");
+                addShape(shapes, getCylinderFromUser(sc));
+                break;
+            case 4:
+                System.out.println("Enter Cube Details:");
+                addShape(shapes, getCubeFromUser(sc));
+                break;
+            default:
+                System.out.println("Enter valid shape choice");
+                break;
+        }
+    }
+
+    public static void printMainMenu(){
+        System.out.println("Shape Area Volume calculator");
+        System.out.println("1. Add Shape");
+        System.out.println("2. Print Area and Volume of shapes");
+        System.out.println("3. Display info of shapes");
+        System.out.println("0. Exit");
+    }
+
+    public static void runMainMenu(Shape[] shapes, Scanner sc){
+        int choice;
+        do{
+            printMainMenu();
+            System.out.println("Enter choice:");
+            choice = sc.nextInt();
+            switch(choice){
+                case 0:
+                    System.out.println("Exited");
+                    break;
+                case 1:
+                    runShapeMenu(shapes, sc);
+                    break;
+                case 2:
+                    System.out.println("All Shapes Details");
+                    printAllShapesAreaAndVolume(shapes);
+                    break;
+                case 3:
+                    System.out.println("All Shapes Details");
+                    printAllShapesDetails(shapes);
+                    break;
+                default:
+                    System.out.println("Enter valid choice!");
+                    break;
+            }
+        }while(choice != 0);
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Shape[] shapes;
+        System.out.println("Enter no of shapes: ");
+        shapes = new Shape[sc.nextInt()];
+        System.out.println("Shapes length is " + shapes.length);
+        runMainMenu(shapes,sc);
+        sc.close();
+    }
+}
+
+===================================================================================
+Output
+===================================================================================
+
+
+Enter no of shapes: 
+4
+Shapes length is 4
+Shape Area Volume calculator      
+1. Add Shape
+2. Print Area and Volume of shapes
+3. Display info of shapes
+0. Exit
+Enter choice:
+3
+All Shapes Details
+There is no shapes to display     
+Shape Area Volume calculator      
+1. Add Shape
+2. Print Area and Volume of shapes
+3. Display info of shapes
+0. Exit
+Enter choice:
+2
+All Shapes Details
+There is no shapes to display volume and area
+Shape Area Volume calculator
+1. Add Shape
+2. Print Area and Volume of shapes
+3. Display info of shapes
+0. Exit
+Enter choice:
+1
+
+Select Shape
+1. Square
+2. Circle
+3. Cylinder
+4. Cube
+0. Exit
+Enter shape choice:
+1
+Enter Square Details:
+Enter Side:
+10
+Shape Area Volume calculator
+1. Add Shape
+2. Print Area and Volume of shapes
+3. Display info of shapes
+0. Exit
+Enter choice:
+3
+All Shapes Details
+Shape 0
+Shape Details
+Type : Square
+Side : 10.0
+Dimensions : Two
+Shape Area Volume calculator
+1. Add Shape
+2. Print Area and Volume of shapes
+3. Display info of shapes
+0. Exit
+Enter choice:
+2
+All Shapes Details
+Square( S: 10.0 )
+Area: 100.0
+Perimeter: 40.0
+Shape Area Volume calculator
+1. Add Shape
+2. Print Area and Volume of shapes
+3. Display info of shapes
+0. Exit
+Enter choice:
+1
+
+Select Shape
+1. Square
+2. Circle
+3. Cylinder
+4. Cube
+0. Exit
+Enter shape choice:
+2
+Enter Circle Details:
+Enter Radius:
+10
+Shape Area Volume calculator
+1. Add Shape
+2. Print Area and Volume of shapes
+3. Display info of shapes
+0. Exit
+Enter choice:
+1
+
+Select Shape
+1. Square
+2. Circle
+3. Cylinder
+4. Cube
+0. Exit
+Enter shape choice:
+3
+Enter Cylinder Details:
+Is height and radius same?(y,n):
+n
+Enter Height:
+10
+Enter Radius:
+5
+Shape Area Volume calculator
+1. Add Shape
+2. Print Area and Volume of shapes
+3. Display info of shapes
+0. Exit
+Enter choice:
+1
+
+Select Shape
+1. Square
+2. Circle
+3. Cylinder
+4. Cube
+0. Exit
+Enter shape choice:
+4
+Enter Cube Details:
+Enter Edge:
+10
+Shape Area Volume calculator
+1. Add Shape
+2. Print Area and Volume of shapes
+3. Display info of shapes
+0. Exit
+Enter choice:
+2
+All Shapes Details
+Square( S: 10.0 )
+Area: 100.0
+Perimeter: 40.0
+Circle( R: 10.0 )
+Area: 314.1592653589793
+Perimeter: 62.83185307179586
+Cylinder( H: 10.0, R: 5.0 )
+Area: 471.23889803846896
+Volume: 785.3981633974483
+Cube( E: 10.0 )
+Area: 600.0
+Volume: 1000.0
+Shape Area Volume calculator
+1. Add Shape
+2. Print Area and Volume of shapes
+3. Display info of shapes
+0. Exit
+Enter choice:
+3
+All Shapes Details
+Shape 0
+Shape Details
+Type : Square
+Side : 10.0
+Dimensions : Two
+Shape 1
+Shape Details
+Type : Circle
+Radius : 10.0
+Dimensions : Two
+Shape 2
+Shape Details
+Type : Cylinder
+Dimensions : Three
+Height : 10.0
+Radius : 5.0
+Shape 3
+Shape Details
+Type : Cube
+Dimensions : Three
+Edge : 10.0
+Shape Area Volume calculator
+1. Add Shape
+2. Print Area and Volume of shapes
+3. Display info of shapes
+0. Exit
+Enter choice:
+0
+Exited

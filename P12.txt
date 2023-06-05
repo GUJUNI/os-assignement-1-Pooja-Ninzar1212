@@ -1,0 +1,65 @@
+
+Name    : Chauhan Mehul Mahendrabhai
+Roll no : 07
+Course  : MCA 2
+Subject : Java Programming
+Assignment 3 : Collections
+===================================================================================
+
+3) Write a program to store a deck of 52 cards in a linked list in random sequence using a Random class
+object. You can represent a card as a two-character string—”1C” for the ace of clubs, “JD” for the
+jack of diamonds, and so on. Output the cards from the linked list as four hands of 13 cards.
+
+===================================================================================
+
+import java.util.Random;
+import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.Vector;
+
+public class CardGame {
+
+    public static void main(String[] args) {
+        String[] suits = {"C","D","H","S"};
+        String[] cardValue = {"1","2","3","4","5","6","7","8","9","10","j","q","k"};
+        int cardsInDeck = 52;
+        Vector<String> deck = new Vector<String>(cardsInDeck);
+        LinkedList<String> shuffleDeck = new LinkedList<String>();
+        Random c = new Random();
+
+        for(String suit : suits) {
+            for(String cardValues : cardValue) {
+                deck.add(cardValues + suit);
+            }
+        }
+
+        int selection = 0;
+        for(int i=0; i<cardsInDeck; ++i) {
+            selection = c.nextInt(deck.size());
+            shuffleDeck.add(deck.remove(selection));
+        }
+        
+        StringBuffer[] h = {new StringBuffer("Hand 1:"),new StringBuffer("Hand 2:"),new StringBuffer("Hand 3:"),new StringBuffer("Hand 4:")};
+        ListIterator<String> cards = shuffleDeck.listIterator();
+        while(cards.hasNext()) {
+            for(StringBuffer hand : h) {
+                hand.append(' ').append(cards.next());
+            } 
+        }
+
+        for(StringBuffer hand : h) {
+            System.out.println(hand);
+        }
+    }
+}
+
+
+===================================================================================
+Output
+===================================================================================
+
+
+		Hand 1: 9S 10C 8S 7D 3H qS qD 2D 7C 2S 9H 1S 8D
+		Hand 2: 4C jS 8H 10H 6C 4H qC jH 10S 5S jC kD 6S
+		Hand 3: kH kC 6D 7H jD 4S 9C 5C 5H 3C 2C 6H 8C
+		Hand 4: 7S qH 2H 4D 3D 9D 5D 10D kS 1H 1C 1D 3S

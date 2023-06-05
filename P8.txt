@@ -1,0 +1,84 @@
+
+Name    : Chauhan Mehul Mahendrabhai
+Roll no : 07
+Course  : MCA 2
+Subject : Java Programming
+Assignment 3 : Exceptions
+===================================================================================
+
+3) Write a program which creates an Array of character. Make one function with one
+argument as a character and that function throw a user defined exception if the character
+that u have passed is digit.
+
+===================================================================================
+
+public class InvalidCharacter extends Exception{
+    public InvalidCharacter(){
+        super("Invalid character");
+    }
+}
+
+public class Main{
+    private static char validateChar(char ch) throws InvalidCharacter{
+        if(Character.toString(ch).matches("[0-9]+")){
+            throw new InvalidCharacter();
+        }
+        return ch;
+    }
+    private static char[] generateCharArr(int size, Scanner sc) throws InvalidCharacter{
+        char[] charArr = new char[size];
+        for(int i=0; i<charArr.length; i++){
+            System.out.println("Enter char " + (i+1) + ":");
+            charArr[i] = validateChar(sc.nextLine().charAt(0));
+        }
+        return charArr;
+    }
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter no of character:");
+        int charArrLen = sc.nextInt();
+        sc.nextLine();
+        try{
+            char[] arr = generateCharArr(charArrLen, sc);
+            System.out.println("Entered Chars:");
+            for(char ch: arr) {
+                System.out.println(ch);
+            }
+        }catch(InvalidCharacter e){
+            System.out.println("Error:");
+            System.out.println(e.getMessage());
+        }
+        sc.close();
+    }
+}
+
+===================================================================================
+Output
+===================================================================================
+
+
+Enter no of character:
+5
+Enter char 1:
+1
+Error:
+Invalid character
+
+Enter no of character:
+5
+Enter char 1:
+a
+Enter char 2:
+v
+Enter char 3:
+c
+Enter char 4:
+das
+Enter char 5:
+e
+Entered Chars:
+a
+v
+c
+d
+e

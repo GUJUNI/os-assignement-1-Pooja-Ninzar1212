@@ -1,0 +1,52 @@
+
+Name    : Chauhan Mehul Mahendrabhai
+Roll no : 07
+Course  : MCA 2
+Subject : Java Programming
+Assignment 3 : Collections
+===================================================================================
+
+4) Write a generic class Stack<T> that can be used to represent stacks of objects of type T. The class
+should include methods push(), pop(), and isEmpty(). Inside the class, use an ArrayList to hold the
+items on the stack.
+
+===================================================================================
+
+import java.io.*;
+import java.util.Stack;
+
+public class StackDemo {
+    public static void stackPush(Stack<Integer> stack) {
+        for(int i=15; i<25; i++) {
+            stack.push(i);
+        }
+    }
+
+    static void stackPop(Stack<Integer> stack) {
+        System.out.println("Pop Operation");
+        for(int i=0; i<5; i++) {
+            Integer y = (Integer) stack.pop();
+            System.out.println(y);
+        }
+    }
+
+    public static void main(String[] args) {
+        Stack<Integer> stack = new Stack<Integer>();
+        stackPush(stack);
+        stackPop(stack);
+    }
+}
+
+
+===================================================================================
+Output
+===================================================================================
+
+
+		D:\OSAssignment\Java\Examples>java StackDemo
+		Pop Operation
+		24
+		23
+		22
+		21
+		20

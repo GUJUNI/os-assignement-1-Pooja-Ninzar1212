@@ -1,0 +1,78 @@
+
+Name    : Chauhan Mehul Mahendrabhai
+Roll no : 07
+Course  : MCA 2
+Subject : Java Programming
+Assignment 3 : Collections
+===================================================================================
+
+5) Create two hash sets {"George", "Jim", "John", "Blake", "Kevin", "Michael"} and {"George", "Katie",
+"Kevin", "Michelle", "Ryan"}, and find their union, difference, and intersection.
+
+===================================================================================
+
+import java.util.HashSet;
+
+public class DoubleSet {
+	public static void main(String[] args) {
+		HashSet<String> s = new HashSet<String>(5);
+		HashSet<String> s1 = new HashSet<String>(6);
+		
+		String[] set1={"Kuldip","Kulin","Manthan","Shivam","Aditya"};
+		String[] set2={"Umang","Devendra","Manthan","Kuldip","Dharmil","Hardik"};
+		
+		for(String CurrentItem : set1) {
+			s.add(CurrentItem);
+		}
+		
+		for(String CurrentItem2 : set2) {
+			s1.add(CurrentItem2);
+		}
+
+		HashSet<String> union = new HashSet<String>(s);
+		
+		//Union
+		for(String currentitem2 : s1) {
+			if(!union.contains(currentitem2)) {
+				union.add(currentitem2);
+			}
+		}
+
+		//Intersection
+		HashSet<String> intersection = new HashSet<String>();
+		for(String currentitem : s) {
+			if(s1.contains(currentitem)) {
+				intersection.add(currentitem);
+			}
+		}
+		
+		//Difference
+		HashSet<String> difference = new HashSet<String>();
+		for(String Currentitem : s) {
+			if(!s1.contains(Currentitem)) {
+				difference.add(Currentitem);
+			}
+		}
+		
+		for(String Currentitem1 : s1) {
+			if(!s.contains(Currentitem1)) {
+				difference.add(Currentitem1);
+			}
+		}
+		System.out.println("Set 1: " + s);
+		System.out.println("Set 2: " + s1);
+		System.out.println("Union: " + union);
+		System.out.println("Intersection: " + intersection);
+		System.out.println("Difference: " + difference);
+	}
+}
+
+===================================================================================
+Output
+===================================================================================
+
+		Set 1: [Kulin, Manthan, Shivam, Aditya, Kuldip]
+		Set 2: [Manthan, Umang, Hardik, Devendra, Kuldip, Dharmil]
+		Union: [Kulin, Manthan, Umang, Shivam, Hardik, Devendra, Kuldip, Dharmil, Aditya]
+		Intersection: [Manthan, Kuldip]
+		Difference: [Kulin, Umang, Shivam, Hardik, Devendra, Dharmil, Aditya]

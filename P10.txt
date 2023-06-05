@@ -1,0 +1,79 @@
+
+Name    : Chauhan Mehul Mahendrabhai
+Roll no : 07
+Course  : MCA 2
+Subject : Java Programming
+Assignment 3 : Collections
+===================================================================================
+
+1) Write a program to read employee detail and store the employee object in linkedlist. Sort the
+list based on salary.
+	a. Create class- Employee (Attributes- empid, name , dob , salary : Methods: setDetails,
+		getDetails and constructures )
+	b. Employee class must implement comparable interface
+	c. Create another class TestEmployee, here create the linkedlist of employees and sort the
+		list.
+
+===================================================================================
+import java.util.LinkedList;
+import java.util.Collections;
+
+class Employee implements Comparable<Employee> {
+
+    String name;
+    int id, salary;
+    Employee(String name, int id, int salary) {
+        this.name = name;
+        this.id = id;
+        this.salary = salary;
+    }
+
+    @Override
+    public int compareTo(Employee e) {
+        if(salary > e.salary) {
+            return 1;
+        } else if (salary == e.salary) {
+            return 0;
+        } else {
+            return -1;
+        }
+    }
+}
+
+public class TestEmployee {
+    public static void main(String[] args) {
+        LinkedList<Employee> List = new LinkedList<>();
+        List.add(new Employee("Paras", 21, 35000));
+        List.add(new Employee("Manthan", 19, 45000));
+        List.add(new Employee("Manav", 23, 35000));
+        List.add(new Employee("Umang", 21, 42000));
+
+        System.out.println("Unsorted list");
+        for(Employee e : List) {
+            System.out.println(e.salary + " "+e.name + " "+ e.id);
+        }
+
+        System.out.println();
+        Collections.sort(List);
+        System.out.println("Sorted list");
+        for(Employee e: List) {
+            System.out.println(e.salary + " "+e.name + " "+ e.id);
+        }
+    }
+}
+
+===================================================================================
+Output
+===================================================================================
+
+		Unsorted list
+		35000 Paras 21
+		45000 Manthan 19
+		35000 Manav 23
+		42000 Umang 21
+
+		Sorted list
+		35000 Paras 21
+		35000 Manav 23
+		42000 Umang 21
+		45000 Manthan 19

@@ -1,0 +1,211 @@
+
+Name    : Chauhan Mehul Mahendrabhai
+Roll no : 07
+Course  : MCA 2
+Subject : Java Programming
+Assignment 3 : Exceptions
+===================================================================================
+
+1) Define an Employee class with Employee code , name , date of birth , and date of
+appointment . The Employee code must have a format of year-designation-number. The
+year will be two digit code . The designation is single letter code M for Manager , A for
+Administrative , T for Technical Staff , E for Executive Staff . The number is a three
+digit number. For Eg.
+    87-M-123 ( year is 1987 , Designation is Manager and number is 123)
+    91-T-126
+
+Write a java program to read the employee code , name , date of birth , and date of
+appointment and validate the employee code. If the employee code is incorrect a suitable
+user defined exception must be thrown . If the date of birth is after date of appointment then
+throw another user defined exception.
+
+If all the details are correct then only create the employee object and display detail of
+employees and number of years of experience.
+
+===================================================================================
+
+public class InvalidDateOfJoin extends Exception{
+    public InvalidDateOfJoin(){
+        super("Invalid Employee Date of join");
+    }
+}
+
+
+public class InvalidEmployeeCode extends Exception{
+    public InvalidEmployeeCode(String msg){
+        super(msg);
+    }
+}
+
+public class Employee{
+    private String code;
+    private String name;
+    private Date dob;
+    private Date doa;
+
+    public boolean isValidDesignationLetter(String designationChar){
+        return (designationChar.equals("M") || designationChar.equals("T") || designationChar.equals("A") || designationChar.equals("E"));
+    }
+
+    private void checkEmployeeCode(String code) throws InvalidEmployeeCode{
+        String[] arr = code.split("-");
+        if(arr[0].length() != 2){
+            throw new InvalidEmployeeCode("Invalid year in emp code, It must be only two digits");
+        }
+        if(!isValidDesignationLetter(arr[1])){
+            throw new InvalidEmployeeCode("Invalid Designation Letter, Valid Designation(M: manager, T: techinacal, E: Executive, A: Administrator)");
+        }
+    }
+
+    public Employee(String code, String name, Date dob, Date doa) throws InvalidEmployeeCode, InvalidDateOfJoin {
+        // check employee code is valid or not
+        this.checkEmployeeCode(code);
+        // check dob is older then doa
+        if(dob.compareTo(doa) == 1){
+            throw new InvalidDateOfJoin();
+        } 
+        // check date of join must be greater then tomorrow
+        if(new Date().compareTo(doa) == -1){
+            throw new InvalidDateOfJoin();
+        }        
+        // if employee code is valid then set to employee code
+        this.code = code;
+        this.dob = dob;
+        this.doa = doa;
+        this.name = name;
+    }
+
+    public void display(){
+        Locale lc = Locale.forLanguageTag("hi_IN");
+        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, lc); 
+        System.out.println("Employee Deatils:");
+        System.out.println("Code: " + this.code);
+        System.out.println("Name: " + this.name);
+        System.out.println("Date Of Birth: " + df.format(this.dob));
+        System.out.println("Date Of Join: " + df.format(this.doa));
+    }
+}
+
+public class Main{
+    private static Date getDateFromUser(Scanner sc){
+        System.out.println("Enter Year:");
+        int year = sc.nextInt();
+        sc.nextLine();
+        System.out.println("Enter Month:");
+        int month = sc.nextInt();
+        sc.nextLine();
+        System.out.println("Enter Day:");
+        int day = sc.nextInt();
+        sc.nextLine();
+        return new Date(year-1900, month-1, day);
+    }
+
+    private static Employee getEmployeeFromUser(Scanner sc) throws InvalidEmployeeCode, InvalidDateOfJoin {
+        System.out.println("Enter Employee Deatils");
+        System.out.println("Enter Code:");
+        String code = sc.nextLine();
+        System.out.println("Enter Name: ");
+        String name = sc.nextLine();
+        System.out.println("Enter Date Of Birth:");
+        Date dob = getDateFromUser(sc);
+        System.out.println("Enter Date Of Join:");
+        Date doa = getDateFromUser(sc);
+        return new Employee(code, name, dob, doa);
+    }
+
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        try{
+            Employee e = getEmployeeFromUser(sc);
+            e.display(); 
+        }catch(InvalidEmployeeCode e) {
+            System.out.println("Error on creating Employee:");
+            System.out.println(e.getMessage());
+        }catch(InvalidDateOfJoin e){
+            System.out.println("Error on creating Employee");
+            System.out.println(e.getMessage());
+        }catch(Exception e){
+            System.out.println("Other Error:");
+            System.out.println(e.getMessage());
+        }finally{
+            sc.close();
+        }
+    }
+}
+
+
+
+
+===================================================================================
+Output
+===================================================================================
+
+
+Enter Employee Details
+Enter Code:
+87-M-123
+Enter Name: 
+Paras Gediya
+Enter Date Of Birth:
+Enter Year:
+2001
+Enter Month:
+3
+Enter Day:
+10
+Enter Date Of Join:
+Enter Year:
+2022
+Enter Month:
+06
+Enter Day:
+27
+Employee Deatils:
+Code: 87-M-123
+Name: Paras Gediya
+Date Of Birth: Mar 10, 2001
+Date Of Join: Jun 27, 2022
+
+Enter Employee Deatils
+Enter Code:
+91-K-91
+Enter Name: 
+Paras Gediya
+Enter Date Of Birth:
+Enter Year:
+2001
+Enter Month:
+03
+Enter Day:
+10
+Enter Date Of Join:
+Enter Year:        
+2022
+Enter Month:
+6
+Enter Day:
+27
+Error on creating Employee:
+Invalid Designation Letter, Valid Designation(M: manager, T: techinacal, E: Executive, A: Administrator)
+
+Enter Employee Deatils
+Enter Code:
+12-M-123
+Enter Name: 
+Paras Gediya
+Enter Date Of Birth:
+Enter Year:
+2001
+Enter Month:
+10
+Enter Day:
+10
+Enter Date Of Join:
+Enter Year:
+2000
+Enter Month:
+10
+Enter Day:
+10
+Error on creating Employee
+Invalid Employee Date of join

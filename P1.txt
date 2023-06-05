@@ -1,0 +1,106 @@
+
+Name    : Chauhan Mehul Mahendrabhai
+Roll no : 07
+Course  : MCA 2
+Subject : Java Programming
+Assignment 3 : Interface and Classes
+===================================================================================
+
+1) Write a class called Statistics, which has a static method called average, which takes a one
+dimensional array for double type, as parameter, and prints the average for the values in the
+array.
+
+	a. Now write a class with the main method, which creates a two-dimensional array for the
+	four weeks of a month, containing minimum temperatures for the days of the week(an
+	array of 4 by 7), and uses the average method of the Statistics class to compute and
+	print the average temperatures for the four weeks.
+
+===================================================================================
+
+
+import java.util.Scanner;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+class Statistics {
+    public static double average(double intDouble[]) {
+        int i = 0;
+        double sum = 0;
+        for(i=0; i<intDouble.length; i++) {
+            sum += intDouble[i];
+        }
+        return sum/intDouble.length;
+    }
+}
+
+public class Temperature {
+    public static void main(String[] args) throws IOException {
+        int i = 0, j = 0;
+        double week[][];
+        Scanner sc = new Scanner(System.in);
+
+        week = new double[4][7];
+        for(i=0; i<4; i++) {
+            System.out.println("Week " + (i+1) + ": ");
+            for(j=0; j<7; j++) {
+                System.out.print("Temperature " + (j+1) + ": ");
+                week[i][j] = Double.parseDouble(sc.nextLine());
+            }
+            System.out.println("");
+        }
+
+        System.out.println("Average");
+        for(i=0; i<4; i++) {
+            System.out.println("Week "+(i+1)+": " + Statistics.average(week[i]));
+        }
+    }
+}
+
+===================================================================================
+Output
+===================================================================================
+
+		Week 1:
+		Temperature 1: 40
+		Temperature 2: 42
+		Temperature 3: 43
+		Temperature 4: 44
+		Temperature 5: 45
+		Temperature 6: 41
+		Temperature 7: 40
+
+		Week 2:
+		Temperature 1: 25
+		Temperature 2: 25
+		Temperature 3: 26
+		Temperature 4: 27
+		Temperature 5: 28
+		Temperature 6: 29
+		Temperature 7: 35
+
+		Week 3:
+		Temperature 1: 45
+		Temperature 2: 12
+		Temperature 3: 45
+		Temperature 4: 45
+		Temperature 5: 10
+		Temperature 6: 10
+		Temperature 7: 41
+
+		Week 4:
+		Temperature 1: 41
+		Temperature 2: 41
+		Temperature 3: 41
+		Temperature 4: 45
+		Temperature 5: 47
+		Temperature 6: 48
+		Temperature 7: 40
+
+		Average
+		Week 1: 42.142857142857146
+		Week 2: 27.857142857142858
+		Week 3: 29.714285714285715
+		Week 4: 43.285714285714285
+
+
+

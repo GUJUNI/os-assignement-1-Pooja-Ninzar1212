@@ -1,0 +1,285 @@
+
+Name    : Chauhan Mehul Mahendrabhai
+Roll no : 07
+Course  : MCA 2
+Subject : Java Programming
+Assignment 3 : Interface and Classes
+===================================================================================
+
+3) Develop the Figure application in given steps.
+	a. Design an interface IFig having the following methods:
+		i. public void calcAreaQ;
+		ii. public void calcVolumeO;
+		iii. It must also have the variable pi of the type double and having a value 3.1428.
+	b. Design an abstract class called Figure.
+		i. It must have three attributes r. a and v of data type double.
+		ii. It has abstract methods:
+			1. public abstract void dispAreaQ;
+			2. public abstract void dispVolumeO;
+	c. Design three classes Cone, Sphere and Cylinder. Each of them, should
+	   extend the Figure class and implement the IFig interface.
+	d. Write a test program to demonstrate polymorphism
+		ClassName Attribute
+		Cone h, s of the type double
+		Sphere
+		Cylinder h of the type double
+
+	Figure 		Formulae
+
+	Cone 		Area =(pi*r*s)+(pi*r*r)
+				Volume = (pi * r * r * h)/3
+	Sphere		Area = 4 * p * r * r
+				Volume = (4 * pj * r * r r) /3
+
+	Cylinder	Area =(2*pi*r*r)+(2*pi*r*h)
+				Volume = pi * r * r * h
+
+===================================================================================
+
+import java.util.Scanner;
+
+interface IFig {
+	double pi = 3.1428;
+	public void calcArea();
+	public void calcVolume();	
+}
+
+abstract class Figure {
+	protected double r, a, v;
+	Figure(double radius){
+		this.r = radius;
+	}
+	public abstract void dispArea();
+	public abstract void dispVolume();
+}
+
+class Cone extends Figure implements IFig {
+	double h, s;
+	
+	Cone(double radius, double width, double height) {
+//		Scanner sc = new Scanner(System.in);
+//		System.out.print("Enter Radius: ");
+//		// super(sc.nextDouble());
+//		r = sc.nextDouble();
+//		
+//		System.out.print("Enter Height: ");
+//		this.h = sc.nextDouble();
+//		
+//		System.out.print("Enter Surface: ");
+//		this.s = sc.nextDouble();
+//		
+//		sc.close();
+		super(radius);
+		this.h = height;
+		this.s = width;
+	}
+	
+	@Override
+	public void calcArea() {
+		a = (pi * r * s) + (pi * r * r);
+	}
+	
+	@Override
+	public void dispArea() {
+		System.out.println("Area of Cone is: " + a);
+	}
+	
+	@Override
+	public void calcVolume() {
+		v = (pi * r * r * h) / 3;
+	}
+	
+	@Override
+	public void dispVolume() {
+		System.out.println("Volume of Cone is: " + v);
+	}
+}
+
+class Sphere extends Figure implements IFig {
+	
+	Sphere(double radius) {
+//		Scanner sc = new Scanner(System.in);
+//		System.out.print("Enter Radius: ");
+		// super(sc.nextDouble());
+		super(radius);
+//		sc.close();
+	}
+	
+	@Override
+	public void calcArea() {
+		a = (4 * pi * r *  r);
+	}
+	
+	@Override
+	public void dispArea() {
+		System.out.println("Area of Sphere is: " + a);
+	}
+	
+	@Override
+	public void calcVolume() {
+		v = (4 * pi * r * r * r) / 3;
+	}
+	
+	@Override
+	public void dispVolume() {
+		System.out.println("Volume of Sphere is: " + v);
+	}
+}
+
+class Cylinder extends Figure implements IFig {
+	double h;
+//	Scanner sc = new Scanner(System.in);
+	Cylinder(double radius, double height) {
+//		System.out.println("Enter Height: ");
+//		this.h = sc.nextDouble();
+		
+//		System.out.println("Enter Radius: ");
+		// super(sc.nextDouble());
+//		r = sc.nextDouble();
+		super(radius);
+		this.h = height;
+//		sc.close();
+	}
+	
+	@Override
+	public void calcArea() {
+		a = (2*pi*r*r) + (2*pi*r*h);
+	}
+	
+	@Override
+	public void dispArea() {	
+		System.out.println("Area of Cylinder is: " + a);
+	}
+	
+	@Override
+	public void calcVolume() {
+		v = (pi*r*r*h);
+	}
+	
+	@Override
+	public void dispVolume() {
+		System.out.println("Volume of Cylinder is: " + v);
+	}
+}
+
+public class P3 {
+	
+	public static void printMenu() {
+		System.out.println("Please Select Option");
+		System.out.println("0. Exit");
+		System.out.println("1. Cone");
+		System.out.println("2. Sphere");
+		System.out.println("3. Cylinder");
+	}
+	
+	public static void getAndPrintCone(Scanner sc) {
+		System.out.print("Enter Radius: ");
+		double radius = sc.nextDouble();
+		
+		System.out.print("Enter Height: ");
+		double height = sc.nextDouble();
+		
+		System.out.print("Enter Width: ");
+		double width = sc.nextDouble();
+		Cone fr = new Cone(radius, width, height);
+		fr.calcArea();
+		fr.calcVolume(); 
+		fr.dispArea();
+		fr.dispVolume();
+	}
+	
+	public static void getAndPrintSphere(Scanner sc) {
+		System.out.print("Enter Radius: ");
+		double radius = sc.nextDouble();
+		Sphere fr1 = new Sphere(radius);
+		fr1.calcArea();
+		fr1.calcVolume();
+		fr1.dispArea();
+		fr1.dispVolume();
+	}
+	
+	public static void getAndPrintCylinder(Scanner sc) {
+		System.out.print("Enter radius: ");
+		double radius = sc.nextDouble();
+		
+		System.out.print("Enter Height: ");
+		double height = sc.nextDouble();
+		Cylinder fr2 = new Cylinder(radius, height);
+		fr2.calcArea();
+		fr2.calcVolume();
+		fr2.dispArea();
+		fr2.dispVolume();
+	}
+	
+	public static void main(String args[]) {
+		
+		Scanner sc = new Scanner(System.in);
+		int ch;
+		do {
+			printMenu();
+			ch = sc.nextInt();
+			switch(ch) {
+				case 0: 
+					System.out.println("Exiting...");
+					break;
+				case 1:
+					getAndPrintCone(sc);
+					break;
+				case 2:
+					getAndPrintSphere(sc);
+					break;
+				case 3:
+					getAndPrintCylinder(sc);
+					
+					break;
+				default:
+					System.out.println("Please Enter valid Input");
+			}
+		} while(ch!=0);
+		sc.close();
+	}
+} 
+
+
+===================================================================================
+Output
+===================================================================================
+ 
+
+		Please Select Option
+		0. Exit
+		1. Cone
+		2. Sphere
+		3. Cylinder
+		1
+		Enter Radius: 10
+		Enter Height: 10
+		Enter Width: 10
+		Area of Cone is: 628.56
+		Volume of Cone is: 1047.6
+		Please Select Option
+		0. Exit
+		1. Cone
+		2. Sphere
+		3. Cylinder
+		2
+		Enter Radius: 10
+		Area of Sphere is: 1257.12
+		Volume of Sphere is: 4190.4
+		Please Select Option
+		0. Exit
+		1. Cone
+		2. Sphere
+		3. Cylinder
+		3
+		Enter radius: 10
+		Enter Height: 10
+		Area of Cylinder is: 1257.12
+		Volume of Cylinder is: 3142.7999999999997
+		Please Select Option
+		0. Exit
+		1. Cone
+		2. Sphere
+		3. Cylinder
+		0
+		Exiting...

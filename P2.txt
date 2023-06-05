@@ -1,0 +1,608 @@
+
+Name    : Chauhan Mehul Mahendrabhai
+Roll no : 07
+Course  : MCA 2
+Subject : Java Programming
+Assignment 3 : Interface and Classes
+===================================================================================
+
+
+2) Develop the following application in given steps.
+    a. Step-1 :
+        i. Define a class called Cartesian Point, which has two instance variables, x and y.
+			Provide the following methods
+            1. get X() and get Y() to return the values of the x and y values respectively.
+            2. move() which would take two integers as parameters and change the
+            values of x and y respectively,
+            3. a method called display() which would display the current values of x
+            and y.
+
+        ii. Now overload the method move() to work with single parameter, which would
+			set both x and y to the same values, .
+        iii.Provide constructors with two parameters and overload to work with one
+			parameter as well.
+        iv. Now define a class called Test Cartesian Point, with the main method to test the
+			various methods in the Cartesian Point class.
+
+    b. Step-2 :
+        i. Define a class called Triangle, which has constructor with three parameters,
+			which are of type Cartesian Point.
+        ii. Provide methods
+            1. to find the area and the perimeter of the Triangle,
+            2. a method display() to display the three Cartesian Points separated by ':'
+            character,
+            3. a method move() to move the first Cartesian Point to the specified x, y
+            location, the move should take care of relatively moving the other
+            points as well,
+            4. a method called rotate, which takes two arguments, one is the Cartesian
+            Point and other is the angle in clockwise direction.
+            5. Overload the move method to work with Cartesian Point as a
+            parameter.
+
+        iii. Now define a class called Test Triangle to test the various methods defined in
+			the Triangle class.
+
+    c. Step-3 :
+        i. Similarly also define a class called Rectangle which has four Cartesian Point.
+		
+===================================================================================
+
+public class CartesianPoint{
+    private int x, y;
+
+    public CartesianPoint(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public CartesianPoint(int pointValue) {
+        this(pointValue,pointValue);
+    }
+
+    public CartesianPoint(){
+        this(0,0);
+    }
+
+    public int getX(){
+        return this.x;
+    }
+
+    public int getY(){
+        return this.y;
+    }
+
+    public void move(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+
+    public void move(int pointValue){
+        this.move(pointValue,pointValue);
+    }
+
+    public void display(){
+        System.out.println("X: " + this.x);
+        System.out.println("Y: " + this.y);
+    }
+}
+
+public class TestCartesianPoint{
+    public static void main(String[] args){
+        CartesianPoint cp = new CartesianPoint(10);
+        cp.display();
+        System.out.println("X " + cp.getX());
+        System.out.println("Y " + cp.getY());
+        cp.move(5,5);
+        cp.move(5);
+        cp.display();
+    }
+}
+
+public class Triangle{
+    CartesianPoint topPoint, leftPoint, rightPoint;
+
+    public Triangle(CartesianPoint topPoint, CartesianPoint leftPoint, CartesianPoint rightPoint){
+        this.topPoint = topPoint;
+        this.leftPoint = leftPoint;
+        this.rightPoint = rightPoint;
+    }
+
+    private int getASide(){
+        return Math.abs(this.topPoint.getY() - this.leftPoint.getY());
+    }
+
+    private int getBSide(){
+        return Math.abs(this.rightPoint.getX() - this.leftPoint.getX());
+    }
+
+    private int getCSide(){
+        return Math.abs(this.topPoint.getY() - this.rightPoint.getY());
+    }
+
+    public int getPerimeter(){
+        return this.getASide() + this.getBSide() + this.getCSide();
+    }
+
+    public double getArea() {
+        // here we get area of triangle by using Heron's formula without knowing height
+        // area = \/ s (s-a) (s-b) (s-c)
+        // s = (a+b+c)/2
+        float a = (float) this.getASide();
+        float b = (float) this.getBSide();
+        float c = (float) this.getCSide();
+        float s = (a + b + c)/2;
+        // apply formula
+        return Math.sqrt(s * (s - a) * (s - b) * (s - c));
+    }
+
+    public void display(){
+        System.out.println("A:("+this.topPoint.getX()+", "+this.topPoint.getY()+"), B:("+this.leftPoint.getX()+", "+this.leftPoint.getY()+"), C:("+this.rightPoint.getX()+", "+this.rightPoint.getY()+")");
+    }
+
+    public void move(int x, int y) {
+        int diffX =  x - this.topPoint.getX() ;
+        int diffY = y - this.topPoint.getY();
+        this.topPoint.move(x,y);
+        this.leftPoint.move(this.leftPoint.getX() + diffX, this.leftPoint.getY() + diffY);
+        this.rightPoint.move(this.rightPoint.getX() + diffX, this.rightPoint.getY() + diffY);
+    }
+    
+    public void move(CartesianPoint cp){
+        this.move(cp.getX(), cp.getY());
+    }
+    
+    public int[] multiplyRotationMatrixWithPoint(double[][] rotationMatrix, CartesianPoint cp) {
+        int[] arr=new int[2];
+        for(int i=0; i<rotationMatrix.length; i++){
+           arr[i]= (int)(Math.round(rotationMatrix[i][0] * cp.getX()) + Math.round(rotationMatrix[i][1] * cp.getY()));
+        }
+        return arr;
+    }
+
+    private void movePointFromMatrix(int[] xy, CartesianPoint cp){
+        cp.move(xy[0],xy[1]);
+    }
+
+    private void printRotationValues(double degree, int[] topPoint, int[] rightPoint, int[] leftPoint){
+        System.out.println("After rotation of "+degree+"deg Triangle's Cartesian Points will be");
+        System.out.println("A:("+topPoint[0]+", "+topPoint[1]+"), B:("+leftPoint[0]+", "+leftPoint[1]+"), C:("+rightPoint[0]+", "+rightPoint[1]+")");
+    }
+
+    public void rotateFromOrigin(double degree){
+        double degreeRadians = Math.toRadians(-degree);
+        
+        double[][] rotationMatrix = {
+            {Math.cos(degreeRadians), - Math.sin(degreeRadians)},
+            {Math.sin(degreeRadians), Math.cos(degreeRadians)}
+        };
+
+        printRotationValues(degree,this.multiplyRotationMatrixWithPoint(rotationMatrix, this.topPoint),this.multiplyRotationMatrixWithPoint(rotationMatrix, this.rightPoint),this.multiplyRotationMatrixWithPoint(rotationMatrix, this.leftPoint));
+    }
+}
+
+public class TestTriangle{
+    private static CartesianPoint getCartesianPointFromUser(Scanner sc){
+        System.out.println("Enter X:");
+        int x = sc.nextInt();
+        System.out.println("Enter Y:");
+        int y = sc.nextInt();
+        return new CartesianPoint(x,y);
+    }
+    private static Triangle getTriangleFromUser(Scanner sc){
+        System.out.println("Triangle Deatils:");
+        System.out.println("Enter TopPoint Point deatils:");
+        CartesianPoint topPoint = getCartesianPointFromUser(sc);
+        System.out.println("Enter LeftPoint Point deatils:");
+        CartesianPoint leftPoint = getCartesianPointFromUser(sc);
+        System.out.println("Enter RightPoint Point deatils:");
+        CartesianPoint rightPoint = getCartesianPointFromUser(sc);
+        return new Triangle(topPoint,leftPoint,rightPoint);
+    }
+
+    private static void printTriangleAreaAndPerimeter(Triangle t){
+        System.out.println("Triangle Area and Perimeter:");
+        System.out.printf("Area: %.2f\n", t.getArea());
+        System.out.println("Perimeter: " + t.getPerimeter());
+    }
+
+    private static void rotateTriangle(Triangle t, Scanner sc){
+        System.out.println("Enter degree to rotate Triangle from Origin:");
+        int degree = sc.nextInt();
+        t.rotateFromOrigin(degree);
+    }
+
+    private static void printMainMenu(){
+        System.out.println("Test Triangle");
+        System.out.println("1. Find Area And Perimeter");
+        System.out.println("2. Move Triangle");
+        System.out.println("3. Rotate Triangle From Origin");
+        System.out.println("4. Display Triangle");
+        System.out.println("0. Exit");
+    }
+
+    private static void runMainMenu(Triangle t,Scanner sc){
+        int choice;
+        do{
+            printMainMenu();
+            System.out.println("Enter Choice:");
+            choice = sc.nextInt();
+
+            switch(choice){
+                case 0:
+                    System.out.println("Exited");
+                    break;
+                case 1:
+                    printTriangleAreaAndPerimeter(t);
+                    break;  
+                case 2:
+                    System.out.println("Enter Details to move Triangle:");
+                    t.move(getCartesianPointFromUser(sc));
+                    break;
+                case 3:
+                    rotateTriangle(t, sc);
+                    break;
+                case 4:
+                    System.out.println("Triangle Details");
+                    t.display();
+                    break;
+                default:
+                    System.out.println("Enter valid choice");
+                    break;
+            }
+        }while(choice != 0);
+    }
+
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        Triangle t = getTriangleFromUser(sc);
+        runMainMenu(t, sc);
+        sc.close(); 
+    }
+}
+
+public class Rectangle{
+    CartesianPoint topLeftPoint, topRightPoint, bottomLeftPoint, bottomRightPoint;
+
+    public Rectangle(CartesianPoint topLeftPoint, CartesianPoint topRightPoint, CartesianPoint bottomRightPoint, CartesianPoint bottomLeftPoint) throws Exception{
+        int topWidth = topRightPoint.getX() - topLeftPoint.getX();
+        int bottomWidth = bottomRightPoint.getX() - bottomLeftPoint.getX();
+        int leftHeight = topLeftPoint.getY() - bottomLeftPoint.getY();
+        int rightHeight = topRightPoint.getY() - bottomRightPoint.getY();
+        if(topWidth != bottomWidth && leftHeight != rightHeight){
+            throw new Exception("Enter valid rectangle");
+        }
+        this.topLeftPoint = topLeftPoint;
+        this.topRightPoint = topRightPoint;
+        this.bottomLeftPoint = bottomLeftPoint;
+        this.bottomRightPoint = bottomRightPoint;
+    }
+    private double getWidth(){
+        return this.topLeftPoint.getY() - this.bottomLeftPoint.getY();
+    }
+    private double getLength() {
+        return this.topRightPoint.getX() - this.topLeftPoint.getX();
+    }
+    public double getArea(){
+        return (this.getWidth() * this.getLength());
+    }
+    public double getPerimeter() {
+        return (2 * (this.getWidth() + this.getLength()));
+    }
+    public void move(int x, int y){
+        int diffX = x - this.topLeftPoint.getX();
+        int diffY = y - this.topLeftPoint.getY();
+        this.topLeftPoint.move(x,y);
+        this.topRightPoint.move(this.topRightPoint.getX() + diffX, this.topRightPoint.getY() + diffY);
+        this.bottomRightPoint.move(this.bottomRightPoint.getX() + diffX, this.bottomRightPoint.getY() + diffY);
+        this.bottomLeftPoint.move(this.bottomLeftPoint.getX() + diffX, this.bottomLeftPoint.getY() + diffY);
+    }
+    public void move(CartesianPoint cp){
+        this.move(cp.getX() ,cp.getY());
+    }
+    public void movePointsForRotation(int degree,int multiplyXValue, int multiplyYValue){
+        System.out.println("After rotation of "+degree+"deg Rectangle's Cartesian Points will be");
+        System.out.print("A: ("+multiplyYValue*this.topLeftPoint.getY()+","+multiplyXValue*this.topLeftPoint.getX()+"), ");
+        System.out.print("B: ("+multiplyYValue*this.topRightPoint.getY()+","+multiplyXValue*this.topRightPoint.getX()+"), ");
+        System.out.print("C: ("+multiplyYValue*this.bottomRightPoint.getY()+","+multiplyXValue*this.bottomRightPoint.getX()+"), ");
+        System.out.print("D: ("+multiplyYValue*this.bottomLeftPoint.getY()+","+multiplyXValue*this.bottomLeftPoint.getX()+")");
+        System.out.println();
+    }
+    public void rotate(int degree){
+        switch(degree){
+            case 90:
+                // (y,-x)
+                movePointsForRotation(degree,-1, 1);
+                break;
+            case 180:
+                // (-x,-y)
+                movePointsForRotation(degree,-1,-1);
+                break;
+            case 270:
+                // (-y,x)
+                movePointsForRotation(degree,1,-1);
+                break;
+            case 360: 
+                // (x,y)
+                movePointsForRotation(degree,1,1);
+                break;
+            default:
+                System.out.println("Enter valid degree only 90,180,270,360 degrees");
+                return;
+        }
+        System.out.println("Rectangle is rotated " + degree + "deg");
+    }
+    public void display(){
+        System.out.println("A: ("+this.topLeftPoint.getX()+", "+this.topLeftPoint.getY()+"), B: ("+this.topRightPoint.getX()+", "+this.topRightPoint.getY()+"), C: ("+this.bottomRightPoint.getX()+", "+this.bottomRightPoint.getY()+"), D: ("+this.bottomLeftPoint.getX()+", "+this.bottomLeftPoint.getY()+")");
+    }
+}
+
+public class TestRectangle{
+
+    private static CartesianPoint getCartesianPointFromUser(Scanner sc){
+        System.out.println("Enter X:");
+        int x = sc.nextInt();
+        System.out.println("Enter Y:");
+        int y = sc.nextInt();
+        return new CartesianPoint(x,y);
+    }
+    private static Rectangle getRectangleFromUser(Scanner sc) throws Exception{
+        System.out.println("Rectangle Deatils:");
+        System.out.println("Enter TopLeft Point deatils:");
+        CartesianPoint topLeftPoint = getCartesianPointFromUser(sc);
+        System.out.println("Enter TopRight Point deatils:");
+        CartesianPoint topRightPoint = getCartesianPointFromUser(sc);
+        System.out.println("Enter bottomRight Point deatils:");
+        CartesianPoint bottomRightPoint = getCartesianPointFromUser(sc);
+        System.out.println("Enter bottomLeft Point deatils:");
+        CartesianPoint bottomLeftPoint = getCartesianPointFromUser(sc);
+        return new Rectangle(topLeftPoint, topRightPoint, bottomRightPoint, bottomLeftPoint);
+    }
+
+    private static void printRectangleAreaAndPerimeter(Rectangle rect){
+        System.out.println("Rectangle Area and Perimeter:");
+        System.out.printf("Area: %.2f\n", rect.getArea());
+        System.out.println("Perimeter: " + rect.getPerimeter());
+    }
+
+    private static void rotateRectangle(Rectangle rect, Scanner sc){
+        System.out.println("Enter degree to rotate Triangle(90,180,270,360):");
+        int degree = sc.nextInt(); 
+        rect.rotate(degree);
+    }
+
+    private static void printMainMenu(){
+        System.out.println("Test Rectangle");
+        System.out.println("1. Find Area And Perimeter");
+        System.out.println("2. Move Rectangle");
+        System.out.println("3. Rotate Rectangle");
+        System.out.println("4. Display Rectangle");
+        System.out.println("0. Exit");
+    }
+
+    private static void runMainMenu(Rectangle rect,Scanner sc){
+        int choice;
+        do{
+            printMainMenu();
+            System.out.println("Enter Choice:");
+            choice = sc.nextInt();
+
+            switch(choice){
+                case 0:
+                    System.out.println("Exited");
+                    break;
+                case 1:
+                    printRectangleAreaAndPerimeter(rect);
+                    break;  
+                case 2:
+                    System.out.println("Enter Details to move Rectangle:");
+                    rect.move(getCartesianPointFromUser(sc));
+                    break;
+                case 3:
+                    rotateRectangle(rect, sc);
+                    break;
+                case 4:
+                    System.out.println("Rectangle Details");
+                    rect.display();
+                    break;
+                default:
+                    System.out.println("Enter valid choice");
+                    break;
+            }
+        }while(choice != 0);
+    }
+
+
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        try{
+            Rectangle rect = getRectangleFromUser(sc);
+            runMainMenu(rect,sc);
+        }catch(Exception e){
+            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }finally{
+            sc.close();
+        }
+    }
+}
+
+===================================================================================
+Output
+===================================================================================
+
+X: 10
+Y: 10
+X 10 
+Y 10 
+X: 5 
+Y: 5 
+
+Triangle Deatils:
+Enter TopPoint Point deatils:
+Enter X:
+2
+Enter Y:
+3
+Enter LeftPoint Point deatils:
+Enter X:
+1
+Enter Y:
+1
+Enter RightPoint Point deatils:
+Enter X:
+3
+Enter Y:
+1
+Test Triangle
+1. Find Area And Perimeter
+2. Move Triangle
+3. Rotate Triangle From Origin
+4. Display Triangle
+0. Exit
+Enter Choice:
+1
+Triangle Area and Perimeter:
+Area: 1.73
+Perimeter: 6
+Test Triangle
+1. Find Area And Perimeter
+2. Move Triangle
+3. Rotate Triangle From Origin
+4. Display Triangle
+0. Exit
+Enter Choice:
+3
+Enter degree to rotate Triangle from Origin:
+45
+After rotation of 45.0deg Triangle's Cartesian Points will be
+A:(3, 1), B:(2, 0), C:(3, -1)
+Test Triangle
+1. Find Area And Perimeter
+2. Move Triangle
+3. Rotate Triangle From Origin
+4. Display Triangle
+0. Exit
+Enter Choice:
+4
+Triangle Details
+A:(2, 3), B:(1, 1), C:(3, 1)
+Test Triangle
+1. Find Area And Perimeter
+2. Move Triangle
+3. Rotate Triangle From Origin
+4. Display Triangle
+0. Exit
+Enter Choice:
+2
+Enter Details to move Triangle:
+Enter X:
+3
+Enter Y:
+3
+Test Triangle
+1. Find Area And Perimeter
+2. Move Triangle
+3. Rotate Triangle From Origin
+4. Display Triangle
+0. Exit
+Enter Choice:
+4
+Triangle Details
+A:(3, 3), B:(2, 1), C:(4, 1)
+Test Triangle
+1. Find Area And Perimeter
+2. Move Triangle
+3. Rotate Triangle From Origin
+4. Display Triangle
+0. Exit
+Enter Choice:
+0
+Exited
+
+Rectangle Deatils:
+Enter TopLeft Point deatils:
+Enter X:
+0
+Enter Y:
+3
+Enter TopRight Point deatils:
+Enter X:
+2
+Enter Y:
+3
+Enter bottomRight Point deatils:
+Enter X:
+2
+Enter Y:
+0
+Enter bottomLeft Point deatils:
+Enter X:
+0
+Enter Y:
+0
+Test Rectangle
+1. Find Area And Perimeter
+2. Move Rectangle
+3. Rotate Rectangle
+4. Display Rectangle
+0. Exit
+Enter Choice:
+1
+Rectangle Area and Perimeter:
+Area: 6.00
+Perimeter: 10.0
+Test Rectangle
+1. Find Area And Perimeter
+2. Move Rectangle
+3. Rotate Rectangle
+4. Display Rectangle
+0. Exit
+Enter Choice:
+3
+Enter degree to rotate Triangle(90,180,270,360):
+90
+After rotation of 90deg Rectangle's Cartesian Points will be
+A: (3,0), B: (3,-2), C: (0,-2), D: (0,0)
+Rectangle is rotated 90deg
+Test Rectangle
+1. Find Area And Perimeter
+2. Move Rectangle
+3. Rotate Rectangle
+4. Display Rectangle
+0. Exit
+Enter Choice:
+4
+Rectangle Details
+A: (0, 3), B: (2, 3), C: (2, 0), D: (0, 0)
+Test Rectangle
+1. Find Area And Perimeter
+2. Move Rectangle
+3. Rotate Rectangle
+4. Display Rectangle
+0. Exit
+Enter Choice:
+2
+Enter Details to move Rectangle:
+Enter X:
+1
+Enter Y:
+3
+Test Rectangle
+1. Find Area And Perimeter
+2. Move Rectangle
+3. Rotate Rectangle
+4. Display Rectangle
+0. Exit
+Enter Choice:
+4
+Rectangle Details
+A: (1, 3), B: (3, 3), C: (3, 0), D: (1, 0)
+Test Rectangle
+1. Find Area And Perimeter
+2. Move Rectangle
+3. Rotate Rectangle
+4. Display Rectangle
+0. Exit
+Enter Choice:
+0
+Exited

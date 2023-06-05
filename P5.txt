@@ -1,0 +1,367 @@
+
+Name    : Chauhan Mehul Mahendrabhai
+Roll no : 07
+Course  : MCA 2
+Subject : Java Programming
+Assignment 3 : Interface and Classes
+===================================================================================
+
+5) Create three packages—PersonPack, FlatPack and PFPack.
+    a. Package PersonPack must contain a class called Person with the following attributes:
+		PIDNumber, name, etc.
+        i. It must have a reference variable of the type Flat.
+        ii. It should have a static method displayOwnershiplnfo() that takes as an input
+        parameter a variable of PIDNumber and returns void. This method must display
+        the information about the classes Person and Flat.
+
+    b. Package FlatPack must contain the class F with following attributes: apartmentName,
+		flatNo and noOfBedrooms
+        i. It should have method dispFlatlnfo() that displays information of the attributes
+        of the class Flat.
+
+    c. Package PFPack must contain a class called PFDemo that has a main method .
+        i. create objects of the classes Person and Flat and
+        ii. invoke the displayOwnershiplnfo() method
+
+===================================================================================
+
+public class Flat{
+    private String apartmentName, flatNo;
+    private int noOfBedrooms;
+
+    public Flat(String apartmentName, String flatNo, int noOfBedrooms){
+        this.apartmentName = apartmentName;
+        this.flatNo = flatNo;
+        this.noOfBedrooms = noOfBedrooms;
+    }
+
+    public Flat() {
+        this("None","None",0);
+    }
+
+    public void dispFlatInfo(){
+        System.out.println("Flat details:");
+        System.out.println("Apartment Name: " + this.apartmentName );
+        System.out.println("Flat No: " + this.flatNo );
+        System.out.println("No of bedrooms: " + this.noOfBedrooms );
+    }
+
+}
+
+
+public class Person {
+    private int pidNumber;
+    private String name;
+    private Flat ownedFlat;
+
+    public Person(int pidNumber, String name, Flat ownedFlat){
+        this.pidNumber = pidNumber;
+        this.name = name;
+        this.ownedFlat = ownedFlat;
+    }
+
+    public Person() {
+        this(0,"Unknown", new Flat());
+    }
+
+    public void dispPersonInfo() {
+        System.out.println("Person Deatils:");
+        System.out.println("Pid Number: " + this.pidNumber);
+        System.out.println("Name: " + this.name);
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public int getPIdNumber() {
+        return this.pidNumber;
+    }
+
+    public Flat getOwnedFlat() {
+        return this.ownedFlat;
+    }
+
+    public void dispPersonAndFlatInfo() {
+        this.dispPersonInfo();
+        this.ownedFlat.dispFlatInfo();
+    }
+
+    public static int findPersonByPIdNumber(Person[] persons, int pidNumber){
+        for(int i=0; i<persons.length; i++){
+            if(persons[i] == null)
+                return -1;
+            if(persons[i].pidNumber == pidNumber)
+                return i;
+        }
+        return -1;
+    }
+
+    public static void displayOwnershipInfo(Person[] persons, int pidNumber){
+        int foundPersonIdx = findPersonByPIdNumber(persons,pidNumber);
+        
+        // reached here if person is not found with given pid
+        if(foundPersonIdx == -1)
+        {
+            System.out.println("Person with pid " + pidNumber + " not found!");
+            return;
+        }
+        
+        System.out.println("Found Person Deatils:");
+        persons[foundPersonIdx].dispPersonAndFlatInfo();
+        
+    }
+
+    public static boolean isPIdNumberExists(Person[] persons, int pidNumber){
+        return findPersonByPIdNumber(persons, pidNumber) == -1 ? false : true;
+    }
+} 
+
+
+import java.util.Scanner;
+
+public class PFDemo{
+
+    public static Person getPersonFromUser(Person[] persons,Scanner sc){
+        System.out.println("Enter Person Details:");
+        int pidNumber;
+        boolean isPIdNumberExists = false;
+        do{
+            System.out.println("Enter pid number:");
+            pidNumber = sc.nextInt();
+            sc.nextLine(); 
+            isPIdNumberExists = Person.isPIdNumberExists(persons, pidNumber);
+            if(isPIdNumberExists) {
+                System.out.println("Entered pid number " + pidNumber + " is already exists");
+            }
+        }while(isPIdNumberExists);
+
+
+        System.out.println("Enter name:");
+        String name = sc.nextLine();
+
+        System.out.println("Enter Person's Flat Details:");
+        System.out.println("Enter Apartment Name:");
+        String apartmentName = sc.nextLine();
+
+        System.out.println("Enter FLat No:");
+        String flatNo = sc.nextLine();
+
+        System.out.println("Enter No Of Bedrooms:");
+        int noOfBedrooms = sc.nextInt();
+        sc.nextLine();
+
+        return new Person(pidNumber, name, new Flat(apartmentName, flatNo, noOfBedrooms));
+    }
+
+    public static void addPerson(Person[] persons, Scanner sc) {
+        if(persons[persons.length -1 ] != null)
+        {
+            System.out.println("Person arrays is full. So you can't add new person");
+            return;
+        }
+
+        for(int i=0; i<persons.length; i++){
+            if(persons[i] == null){
+                persons[i] = getPersonFromUser(persons,sc);
+                System.out.println("Perons " + persons[i].getName() + " is added successfully");
+                return;
+            }
+        }
+    }
+
+    public static void displayOwnershipInfo(Person[] persons, Scanner sc) {
+        if(persons[0] == null){
+            System.out.println("Person array is empty");
+            return;
+        }
+
+        System.out.println("Enter Person pidNumber:");
+        int pidNumber = sc.nextInt();
+        sc.nextLine();
+
+        Person.displayOwnershipInfo(persons, pidNumber);
+    }
+
+    public static void displayPersonDetails(Person[] persons){
+        if(persons[0] == null){
+            System.out.println("Person array is empty");
+            return;
+        }
+        System.out.println("All Persons Details:");
+        for(Person currentPerson : persons){
+            if(currentPerson == null)
+                return;
+            currentPerson.dispPersonInfo();
+        }
+    }
+
+    public static void printMainMenu() {
+        System.out.println("Perons And Flat App");
+        System.out.println("1. Add Person");
+        System.out.println("2. Display Person Ownership info");
+        System.out.println("3. Display Person Deatils(pidNumber, name)");
+        System.out.println("0. Exit");
+    }
+
+    public static void runMainMenu(Person[] persons, Scanner sc){
+        int choice;
+        do{
+            printMainMenu();
+            System.out.println("Enter choice:");
+            choice = sc.nextInt();
+            sc.nextLine();
+
+            switch(choice){
+                case 0:
+                    System.out.println("Exited");
+                    break;
+                case 1:
+                    addPerson(persons, sc);
+                    break;
+                case 2:
+                    displayOwnershipInfo(persons, sc);
+                    break;
+                case 3:
+                    displayPersonDetails(persons);
+                    break;
+                default:
+                    System.out.println("Enter valid choice");
+                    break;
+            }
+
+        }while(choice != 0);
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter no of persons:");
+        Person[] persons = new Person[sc.nextInt()];
+        sc.nextLine();
+        runMainMenu(persons, sc);
+        sc.close();
+    }
+}
+
+===================================================================================
+Output
+===================================================================================
+
+
+Enter no of persons:
+4
+Perons And Flat App
+1. Add Person
+2. Display Person Ownership info
+3. Display Person Deatils(pidNumber, name)
+0. Exit
+Enter choice:
+1
+Enter Person Details:
+Enter pid number:    
+101
+Enter name:
+Paras Gediya
+Enter Person's Flat Details:
+Enter Apartment Name:       
+Paritosh
+Enter FLat No:
+4
+Enter No Of Bedrooms:
+3
+Perons Paras Gediya is added successfully
+Perons And Flat App
+1. Add Person
+2. Display Person Ownership info
+3. Display Person Deatils(pidNumber, name)
+0. Exit
+Enter choice:
+1
+Enter Person Details:
+Enter pid number:
+102
+Enter name:
+Manthan Patel
+Enter Person's Flat Details:
+Enter Apartment Name:
+Shadashiv
+Enter FLat No:
+A19
+Enter No Of Bedrooms:
+2
+Perons Manthan Patel is added successfully
+Perons And Flat App
+1. Add Person
+2. Display Person Ownership info
+3. Display Person Deatils(pidNumber, name)
+0. Exit
+Enter choice:
+1
+Enter Person Details:
+Enter pid number:
+101
+Entered pid number 101 is already exists
+Enter pid number:
+103
+Enter name:
+Kuldip Chauhan
+Enter Person's Flat Details:
+Enter Apartment Name:
+Jagdish
+Enter FLat No:
+4
+Enter No Of Bedrooms:
+4
+Perons Kuldip Chauhan is added successfully
+Perons And Flat App
+1. Add Person
+2. Display Person Ownership info
+3. Display Person Deatils(pidNumber, name)
+0. Exit
+Enter choice:
+3
+All Persons Details:
+Person Deatils:
+Pid Number: 101
+Name: Paras Gediya
+Person Deatils:
+Pid Number: 102
+Name: Manthan Patel
+Person Deatils:
+Pid Number: 103
+Name: Kuldip Chauhan
+Perons And Flat App
+1. Add Person
+2. Display Person Ownership info
+3. Display Person Deatils(pidNumber, name)
+0. Exit
+Enter choice:
+2
+Enter Person pidNumber:
+106
+Person with pid 106 not found!
+Perons And Flat App
+1. Add Person
+2. Display Person Ownership info
+3. Display Person Deatils(pidNumber, name)
+0. Exit
+Enter choice:
+2
+Enter Person pidNumber:
+101
+Found Person Deatils:
+Person Deatils:
+Pid Number: 101
+Name: Paras Gediya
+Flat details:
+Apartment Name: Paritosh
+Flat No: 4
+No of bedrooms: 3
+Perons And Flat App
+1. Add Person
+2. Display Person Ownership info
+3. Display Person Deatils(pidNumber, name)
+0. Exit
+Enter choice:
+0
+Exited

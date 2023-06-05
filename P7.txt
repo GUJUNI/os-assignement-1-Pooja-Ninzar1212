@@ -1,0 +1,250 @@
+
+Name    : Chauhan Mehul Mahendrabhai
+Roll no : 07
+Course  : MCA 2
+Subject : Java Programming
+Assignment 3 : Exceptions
+===================================================================================
+
+2) A method named average() has one argument that is an array of strings. It converts these
+to double values and returns their average. The method generates a NullPointerException
+if a array elements is null or NumberFormatException if an element is incorrectly
+formatted. Write a program that illustrates how to declare and use this method. Include
+throws clause in the method declaration to indicate that these problems can occur.
+
+===================================================================================
+
+public class Main{
+    private static void addNumberAsStringToArray(Scanner sc,String[] arr){
+        System.out.println("Enter no:");
+        String enteredNo = sc.nextLine();
+        if(arr[arr.length-1] != null){
+            System.out.println("Array is full!");
+            return;
+        }
+        for(int i=0; i<arr.length; i++){
+            if(arr[i] == null){
+                arr[i] = enteredNo;
+                System.out.println("No " + enteredNo + " is added");
+                return;
+            }
+        }
+        System.out.println("Can't add No " + enteredNo);
+
+    } 
+
+    private static double average(String[] arr) throws NullPointerException, NumberFormatException {
+        double sumOfNos = 0;
+        for(int i=0; i<arr.length; i++){
+            // check value is null
+            if(arr[i] == null){
+                throw new NullPointerException();
+            } 
+            // check value is not  int no or double no
+            if(!(arr[i].matches("^[0-9]+$") || arr[i].matches("^[0-9]+.[0-9]+$"))){
+                throw new NumberFormatException();
+            } 
+            sumOfNos = (double)Double.parseDouble(arr[i]);
+        }
+        return (sumOfNos/arr.length);
+    }
+
+    private static void printArray(String[] arr){
+        System.out.println("Array Items");
+        for(String currItem: arr){
+            System.out.println(currItem);
+        }
+    }
+
+    private static void printMainMenu(){
+        System.out.println("String To Number Average Calculator");
+        System.out.println("1. Add No");
+        System.out.println("2. Calculate Average");
+        System.out.println("3. Print Array");
+        System.out.println("0. Exit");
+    }
+
+    private static void runMainMenu(Scanner sc, String[] arr) {
+        int choice;
+        do{
+            printMainMenu();
+            System.out.println("Enter choice:");
+            choice = sc.nextInt();
+            sc.nextLine();
+
+            switch(choice){
+                case 0: 
+                    System.out.println("Exited");
+                    break;
+                case 1:
+                    addNumberAsStringToArray(sc, arr);
+                    break;
+                case 2:
+                    System.out.println("Average of entered no: " + average(arr));
+                    break;
+                case 3:
+                    printArray(arr);
+                    break;
+                default:
+                    System.out.println("Enter valid choice");
+                    break;
+            }
+        }while(choice != 0);
+    }
+    
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter no of values:");
+        int noOfValues = sc.nextInt();
+        sc.nextLine();
+        String[] arr = new String[noOfValues];
+        try{ 
+            runMainMenu(sc, arr);
+        }catch(NullPointerException e){ 
+            System.out.println("Error:");
+            System.out.println("Null Value found!");
+        }catch(NumberFormatException e){
+            System.out.println("Error:");
+            System.out.println("Invalid Number found!");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        sc.close();
+    }
+}
+
+===================================================================================
+Output
+===================================================================================
+
+
+Enter no of values:
+5
+String To Number Average Calculator
+1. Add No
+2. Calculate Average
+3. Print Array
+0. Exit
+Enter choice:
+1
+Enter no:
+10
+No 10 is added
+String To Number Average Calculator
+1. Add No
+2. Calculate Average
+3. Print Array
+0. Exit
+Enter choice:
+1
+Enter no:
+20
+No 20 is added
+String To Number Average Calculator
+1. Add No
+2. Calculate Average
+3. Print Array
+0. Exit
+Enter choice:
+1
+Enter no:
+30
+No 30 is added
+String To Number Average Calculator
+1. Add No
+2. Calculate Average
+3. Print Array
+0. Exit
+Enter choice:
+3
+Array Items
+10
+20
+30
+null
+null
+String To Number Average Calculator
+1. Add No
+2. Calculate Average
+3. Print Array
+0. Exit
+Enter choice:
+2
+Error:
+Null Value found!
+
+Enter no of values:
+5
+String To Number Average Calculator
+1. Add No
+2. Calculate Average
+3. Print Array
+0. Exit
+Enter choice:
+1
+Enter no:
+1
+No 1 is added
+String To Number Average Calculator
+1. Add No
+2. Calculate Average
+3. Print Array
+0. Exit
+Enter choice:
+1
+Enter no:
+2
+No 2 is added
+String To Number Average Calculator
+1. Add No
+2. Calculate Average
+3. Print Array
+0. Exit
+Enter choice:
+1
+Enter no:
+3
+No 3 is added
+String To Number Average Calculator
+1. Add No
+2. Calculate Average
+3. Print Array
+0. Exit
+Enter choice:
+1
+Enter no:
+y
+No y is added
+String To Number Average Calculator
+1. Add No
+2. Calculate Average
+3. Print Array
+0. Exit
+Enter choice:
+1
+Enter no:
+9
+No 9 is added
+String To Number Average Calculator
+1. Add No
+2. Calculate Average
+3. Print Array
+0. Exit
+Enter choice:
+3
+Array Items
+1
+2
+3
+y
+9
+String To Number Average Calculator
+1. Add No
+2. Calculate Average
+3. Print Array
+0. Exit
+Enter choice:
+2
+Error:
+Invalid Number found!
